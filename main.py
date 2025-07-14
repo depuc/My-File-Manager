@@ -64,13 +64,35 @@ class File_Manager:
 
         
     def delete_item(self):
-        pass 
-    def copy_item(self):
-        pass
-    def move_item(self):
-        pass
-    
+        selected_item = self.file_listbox.get(self.file_listbox.curselection())
+        selected_path = os.path.join(self.current_dir, selected_item)
+        if os.path.isfile(selected_path):
+            os.remove(selected_path)
+        elif os.path.isdir(selected_path):
+            shutil.rmtree(selected_path)
+        self.update_file_list()
 
+
+    def copy_item(self):
+        selected_item = self.file_listbox.get(self.file_listbox.curselection())
+        src_location = os.path.join(self.current_dir, selected_item)
+        dst_location = filedialog.askdirectory(title="Select destination directory")
+        if dst_path:
+            if os.path.isdir(src_location):
+                shutil.copytree(src_path, os.path.join(dst_location, os.path.basename(src_location)))
+            else:
+                shutil.copy2(src_path,dst_path)
+        self.update_file_list()
+
+                
+
+    def move_item(self):
+        selected_item = self.file_listbox.get(self.file_listbox.curselection())
+        src_path = os.path.join(self.current_dir, selected_item)
+        dst_path = filedialog.askdirectory(title="Select destination directory")
+        if dst_path:
+            shutil.move(src_path, dst_path)
+            self.update_file_list()
 
 if __name__ == "__main__":
     root = tk.Tk()
